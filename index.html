@@ -1,1 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ink Workshop</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; line-height: 1.6; }
+    h1, h2 { color: #333; }
+    pre { background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    code { font-family: Consolas, monospace; display: block; }
+  </style>
+</head>
+<body>
 
+<h1>Interactive Fiction with Ink</h1>
+
+<p>Welcome! This page guides you through creating interactive stories in Ink. Follow the steps and experiment with the code.</p>
+
+<h2>Step 1: Install Inky</h2>
+<p>Download <a href="https://www.inklestudios.com/inky/">Inky</a> to run your Ink stories.</p>
+
+<h2>Step 2: Basic Story</h2>
+<p>This is your first story with crossroads and choices:</p>
+
+<pre><code>
+=== start ===
+You are at a crossroads.
+
++ [Go left] -> left
++ [Go right] -> right
+
+=== left ===
+You find a treasure chest!
+You win!
++ [Play again] -> start
+
+=== right ===
+You fall into a trap!
+Game over.
++ [Try again] -> start
+</code></pre>
+
+<p>Copy this code into Inky and play it. Notice the <code>=== knots ===</code> and <code>+ choices</code>.</p>
+
+<h2>Step 3: Variables and Inventory</h2>
+<p>Here’s a version with lives and a key:</p>
+
+<pre><code>
+VAR has_key = false
+VAR lives = 3
+VAR previous_knot = "start"
+
+=== start ===
+{lives > 0:
+    What do you do at the crossroads?
+    + [Go left] -> left
+    + [Go right] -> right
+    + [Check your backpack] -> check_inventory
+- else:
+    You’re out of lives! Game over.
+    + [Try again?] -> restart_game
+}
+
+=== left ===
+~ previous_knot = "left"
+You find a shiny key!
+{has_key == false:
+    ~ has_key = true
+    You pick it up and put it in your backpack.
+- else:
+    You already have the key.
+}
++ [Go back] -> start
+
+=== right ===
+~ previous_knot = "right"
+You fall into a trap!
+~ lives = lives - 1
+{lives > 0:
+    You lose a life. You have {lives} lives left.
+    -> start
+- else:
+    You’re out of lives! Game over.
+    + [Try again?] -> restart_game
+}
+
+=== check_inventory ===
+{has_key:
+    You have a key in your backpack.
+- else:
+    Your backpack is empty.
+}
++ [Return] -> return_from_inventory
+
+=== return_from_inventory ===
+-> {previous_knot}
+
+=== restart_game ===
+~ lives = 3
+~ has_key = false
+-> start
+</code></pre>
+
+<h2>Step 4: Play, Modify, Experiment</h2>
+<p>Try these exercises:</p>
+<ul>
+  <li>Add a new knot with a hidden treasure.</li>
+  <li>Make the right path lose 2 lives instead of 1.</li>
+  <li>Add another item in the backpack.</li>
+</ul>
+
+<h2>Resources</h2>
+<p>Download the Ink files:</p>
+<ul>
+  <li><a href="crossroads_basic.ink">Basic Story</a></li>
+  <li><a href="crossroads_variables.ink">Variables & Inventory Story</a></li>
+</ul>
+
+</body>
+</html>
