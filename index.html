@@ -23,6 +23,7 @@
       padding: 10px;
       border-radius: 4px;
       overflow-x: auto;
+      margin-top: 0;
     }
     code { 
       font-family: Consolas, monospace;
@@ -33,6 +34,20 @@
     a:hover { text-decoration: underline; }
     ul { margin-left: 20px; }
     .explanation { background: #ecf0f1; padding: 10px; border-left: 4px solid #e67e22; margin-bottom: 10px; }
+    .code-block { position: relative; margin-bottom: 20px; }
+    .copy-button {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      padding: 5px 10px;
+      font-size: 0.9em;
+      cursor: pointer;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 3px;
+    }
+    .copy-button:hover { background-color: #2980b9; }
   </style>
 </head>
 <body>
@@ -52,7 +67,9 @@
 <strong>Computer perspective:</strong> The computer reads the story top to bottom. When it sees a choice, it waits for input. When a choice is selected, it jumps (diverts) to the specified knot and continues reading.
 </div>
 
-<pre><code>
+<div class="code-block">
+  <button class="copy-button">Copy</button>
+  <pre><code>
 === start ===          // Knot named "start"
 You are at a crossroads.
 
@@ -68,7 +85,8 @@ You win!
 You fall into a trap!
 Game over.
 + [Try again] -> start   // Diverts back to start knot
-</code></pre>
+  </code></pre>
+</div>
 
 <h2>Step 3: Variables, Conditionals, and Inventory</h2>
 <div class="explanation">
@@ -80,7 +98,9 @@ Game over.
 <strong>Diverts within conditionals:</strong> The computer can jump to different knots depending on the result of a conditional. This lets your story flow differently based on what the player has done.
 </div>
 
-<pre><code>
+<div class="code-block">
+  <button class="copy-button">Copy</button>
+  <pre><code>
 VAR has_key = false      // Boolean: tracks if player has a key
 VAR lives = 3            // Integer: tracks remaining lives
 VAR previous_knot = "start"  // Remember the last knot for returning
@@ -134,7 +154,8 @@ You fall into a trap!
 ~ lives = 3
 ~ has_key = false
 -> start
-</code></pre>
+  </code></pre>
+</div>
 
 <h2>Step 4: Play, Modify, Experiment</h2>
 <p>Try these exercises:</p>
@@ -151,6 +172,18 @@ You fall into a trap!
   <li><a href="crossroads_basic.ink">Basic Story</a></li>
   <li><a href="crossroads_variables.ink">Variables & Inventory Story</a></li>
 </ul>
+
+<script>
+document.querySelectorAll('.copy-button').forEach(button => {
+  button.addEventListener('click', () => {
+    const code = button.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code).then(() => {
+      button.innerText = 'Copied!';
+      setTimeout(() => button.innerText = 'Copy', 1500);
+    });
+  });
+});
+</script>
 
 </body>
 </html>
