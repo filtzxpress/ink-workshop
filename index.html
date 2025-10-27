@@ -4,69 +4,100 @@
   <meta charset="UTF-8">
   <title>Ink Workshop</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; line-height: 1.6; }
-    h1, h2 { color: #333; }
-    pre { background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
-    code { font-family: Consolas, monospace; display: block; }
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 20px auto;
+      max-width: 900px;
+      padding: 20px;
+      background-color: #fefefe;
+      color: #333;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    h1 { border-bottom: 2px solid #2c3e50; padding-bottom: 5px; }
+    pre {
+      background-color: #f4f4f4;
+      border-left: 4px solid #3498db;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    code { 
+      font-family: Consolas, monospace;
+      display: block;
+      white-space: pre;
+    }
+    a { color: #2980b9; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    ul { margin-left: 20px; }
+    .explanation { background: #ecf0f1; padding: 10px; border-left: 4px solid #e67e22; margin-bottom: 10px; }
   </style>
 </head>
 <body>
 
 <h1>Interactive Fiction with Ink</h1>
 
-<p>Welcome! This page guides you through creating interactive stories in Ink. Follow the steps and experiment with the code.</p>
+<p>Welcome! This page guides you through creating interactive stories in Ink. Follow the steps and experiment with the code. Don’t worry if things feel confusing — we’ll explain variables, choices, knots, and diverts along the way.</p>
 
 <h2>Step 1: Install Inky</h2>
-<p>Download <a href="https://www.inklestudios.com/inky/">Inky</a> to run your Ink stories.</p>
+<p>Download <a href="https://www.inklestudios.com/inky/">Inky</a> to run your Ink stories on your computer. You can open the code here and test it live.</p>
 
 <h2>Step 2: Basic Story</h2>
-<p>This is your first story with crossroads and choices:</p>
+<div class="explanation">
+<strong>Knots:</strong> Sections of your story. Think of them like chapters. Each knot has a name and contains text and choices.<br>
+<strong>Choices:</strong> What the player can do next. In Ink, "+" creates a choice that can be reused, while "*" creates a one-time choice.<br>
+<strong>Diverts (->):</strong> These are instructions to jump to another knot. Without them, Ink doesn’t know where to go next.
+</div>
 
 <pre><code>
-=== start ===
+=== start ===          // Knot named "start"
 You are at a crossroads.
 
-+ [Go left] -> left
-+ [Go right] -> right
++ [Go left] -> left    // Player chooses left, story jumps to "left" knot
++ [Go right] -> right  // Player chooses right, story jumps to "right" knot
 
 === left ===
 You find a treasure chest!
 You win!
-+ [Play again] -> start
++ [Play again] -> start // Diverts back to start knot
 
 === right ===
 You fall into a trap!
 Game over.
-+ [Try again] -> start
++ [Try again] -> start   // Diverts back to start knot
 </code></pre>
 
-<p>Copy this code into Inky and play it. Notice the <code>=== knots ===</code> and <code>+ choices</code>.</p>
-
 <h2>Step 3: Variables and Inventory</h2>
-<p>Here’s a version with lives and a key:</p>
+<div class="explanation">
+<strong>Variables:</strong> Store information about the story state. For example, “lives” counts how many chances the player has left. “has_key” tracks if the player picked up an item.<br>
+<strong>Conditionals:</strong> Show text or change story flow depending on a variable. Example: if lives > 0, continue; otherwise, game over.<br>
+<strong>Diverts in conditionals:</strong> You can use -> inside a conditional to send the player somewhere based on a variable’s value.
+</div>
 
 <pre><code>
-VAR has_key = false
-VAR lives = 3
-VAR previous_knot = "start"
+VAR has_key = false   // Boolean variable: true/false
+VAR lives = 3         // Integer variable: number of lives
+VAR previous_knot = "start"  // Track where the player was
 
 === start ===
-{lives > 0:
+{lives > 0:                       // Conditional: if player has lives left
     What do you do at the crossroads?
     + [Go left] -> left
     + [Go right] -> right
     + [Check your backpack] -> check_inventory
-- else:
+- else:                           // Otherwise (no lives left)
     You’re out of lives! Game over.
     + [Try again?] -> restart_game
 }
 
 === left ===
-~ previous_knot = "left"
+~ previous_knot = "left"           // Set variable to remember current knot
 You find a shiny key!
 {has_key == false:
-    ~ has_key = true
-    You pick it up and put it in your backpack.
+    ~ has_key = true               // Pick up the key
+    You put it in your backpack.
 - else:
     You already have the key.
 }
@@ -75,7 +106,7 @@ You find a shiny key!
 === right ===
 ~ previous_knot = "right"
 You fall into a trap!
-~ lives = lives - 1
+~ lives = lives - 1                 // Lose a life
 {lives > 0:
     You lose a life. You have {lives} lives left.
     -> start
@@ -93,7 +124,7 @@ You fall into a trap!
 + [Return] -> return_from_inventory
 
 === return_from_inventory ===
--> {previous_knot}
+-> {previous_knot}                 // Return to previous knot
 
 === restart_game ===
 ~ lives = 3
