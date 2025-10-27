@@ -13,9 +13,7 @@
       background-color: #fefefe;
       color: #333;
     }
-    h1, h2 {
-      color: #2c3e50;
-    }
+    h1, h2 { color: #2c3e50; }
     h1 { border-bottom: 2px solid #2c3e50; padding-bottom: 5px; }
     pre {
       background-color: #f4f4f4;
@@ -24,6 +22,7 @@
       border-radius: 4px;
       overflow-x: auto;
       margin-top: 0;
+      position: relative;
     }
     code { 
       font-family: Consolas, monospace;
@@ -48,79 +47,79 @@
       border-radius: 3px;
     }
     .copy-button:hover { background-color: #2980b9; }
+    .hint { color: #e67e22; font-weight: bold; }
   </style>
 </head>
 <body>
 
 <h1>Interactive Fiction with Ink – Beginner Friendly</h1>
 
-<p>Welcome! This page guides you through making interactive stories using Ink. We’ll break down the code, explain variables, conditionals, knots, diverts, and what the computer actually does when you run the story. Don’t worry if some of this seems confusing at first — take it step by step.</p>
+<p>Welcome! This page guides you through creating interactive stories using Ink. We’ll break down the code, explain variables, conditionals, knots, diverts, and how the computer reads and executes your story. Don’t worry if it seems confusing at first — step by step, it will make sense.</p>
 
 <h2>Step 1: Install Inky</h2>
-<p>Download <a href="https://www.inklestudios.com/inky/">Inky</a> and open it on your computer. You’ll be able to copy the Ink code from this page, paste it into Inky, and test your stories live.</p>
+<p>Download <a href="https://www.inklestudios.com/inky/">Inky</a> and open it on your computer. You can copy code from this page, paste it into Inky, and run it immediately.</p>
 
 <h2>Step 2: Basic Story – Knots, Choices, Diverts</h2>
 <div class="explanation">
-<strong>Knots:</strong> Named sections of your story. Think of them as chapters. The computer jumps between knots using diverts.<br>
-<strong>Choices:</strong> What the player can select. In Ink, "+" creates choices that can be selected multiple times, "*" would create one-time choices.<br>
-<strong>Diverts (->):</strong> Instructions telling the computer which knot to go to next. Without a divert, the story ends at the end of the current knot.<br>
-<strong>Computer perspective:</strong> The computer reads the story top to bottom. When it sees a choice, it waits for input. When a choice is selected, it jumps (diverts) to the specified knot and continues reading.
+<strong>Knots:</strong> Named sections of your story, like chapters. The computer jumps between knots using diverts.<br>
+<strong>Choices:</strong> Player decisions. "+" allows multiple selections; "*" is one-time only.<br>
+<strong>Diverts (->):</strong> Tells the computer where to go next. Without a divert, the story ends.<br>
+<strong>Computer perspective:</strong> The computer reads the story line by line. When it sees a choice, it waits for input. When a choice is selected, it jumps to the specified knot and continues.
 </div>
 
 <div class="code-block">
   <button class="copy-button">Copy</button>
   <pre><code>
-=== start ===          // Knot named "start"
+=== start ===   <span class="hint">// Knot starts here</span>
 You are at a crossroads.
 
-+ [Go left] -> left    // Player chooses left -> jump to "left" knot
-+ [Go right] -> right  // Player chooses right -> jump to "right" knot
++ [Go left] -> left     <span class="hint">// Choice → jump to 'left'</span>
++ [Go right] -> right   <span class="hint">// Choice → jump to 'right'</span>
 
 === left ===
 You find a treasure chest!
 You win!
-+ [Play again] -> start // Diverts back to start knot
++ [Play again] -> start  <span class="hint">// Choice → restart story</span>
 
 === right ===
 You fall into a trap!
 Game over.
-+ [Try again] -> start   // Diverts back to start knot
++ [Try again] -> start    <span class="hint">// Choice → restart story</span>
   </code></pre>
 </div>
 
-<h2>Step 3: Variables, Conditionals, and Inventory</h2>
+<h2>Step 3: Variables, Conditionals, Inventory</h2>
 <div class="explanation">
-<strong>Variables:</strong> Storage for information the computer tracks. Examples:<br>
-- <strong>Boolean:</strong> True or false (e.g., has_key = false)<br>
-- <strong>Integer:</strong> Whole numbers (e.g., lives = 3)<br>
-<strong>How the computer uses variables:</strong> It keeps the current value in memory and updates it when the story code changes it. For example, if the player loses a life, the computer subtracts 1 from the lives variable.<br>
-<strong>Conditionals:</strong> Blocks of text or actions that only happen if a certain condition is true. The computer checks the variable and decides which branch to run.<br>
-<strong>Diverts within conditionals:</strong> The computer can jump to different knots depending on the result of a conditional. This lets your story flow differently based on what the player has done.
+<strong>Variables:</strong> The computer uses them to "remember" state.  
+- <strong>Boolean:</strong> True/False (e.g., has_key = false).  
+- <strong>Integer:</strong> Whole numbers (e.g., lives = 3).  
+<strong>Conditionals:</strong> Only run code if a condition is true.  
+<strong>Diverts in conditionals:</strong> The computer jumps to different knots depending on variable values.  
 </div>
 
 <div class="code-block">
   <button class="copy-button">Copy</button>
   <pre><code>
-VAR has_key = false      // Boolean: tracks if player has a key
-VAR lives = 3            // Integer: tracks remaining lives
-VAR previous_knot = "start"  // Remember the last knot for returning
+VAR has_key = false        <span class="hint">// Boolean: tracks if player has key</span>
+VAR lives = 3              <span class="hint">// Integer: tracks remaining lives</span>
+VAR previous_knot = "start" <span class="hint">// Track previous knot</span>
 
 === start ===
-{lives > 0:                       // Conditional: if lives > 0, continue
+{lives > 0:                <span class="hint">// Conditional: if lives > 0</span>
     What do you do at the crossroads?
     + [Go left] -> left
     + [Go right] -> right
     + [Check your backpack] -> check_inventory
-- else:                           // Conditional fallback if lives <= 0
+- else:
     You’re out of lives! Game over.
     + [Try again?] -> restart_game
 }
 
 === left ===
-~ previous_knot = "left"           // Update current location
+~ previous_knot = "left"    <span class="hint">// Remember where player is</span>
 You find a shiny key!
-{has_key == false:                  // If player doesn't already have key
-    ~ has_key = true               // Computer updates variable to true
+{has_key == false:
+    ~ has_key = true        <span class="hint">// Computer updates variable</span>
     You put it in your backpack.
 - else:
     You already have the key.
@@ -130,10 +129,10 @@ You find a shiny key!
 === right ===
 ~ previous_knot = "right"
 You fall into a trap!
-~ lives = lives - 1                 // Subtract 1 from lives
+~ lives = lives - 1          <span class="hint">// Subtract 1 from lives</span>
 {lives > 0:
     You lose a life. You have {lives} lives left.
-    -> start                       // Divert back to start
+    -> start                <span class="hint">// Divert back to start</span>
 - else:
     You’re out of lives! Game over.
     + [Try again?] -> restart_game
@@ -148,7 +147,7 @@ You fall into a trap!
 + [Return] -> return_from_inventory
 
 === return_from_inventory ===
--> {previous_knot}                 // Divert back to previous knot
+-> {previous_knot}          <span class="hint">// Return to previous knot</span>
 
 === restart_game ===
 ~ lives = 3
@@ -157,16 +156,29 @@ You fall into a trap!
   </code></pre>
 </div>
 
-<h2>Step 4: Play, Modify, Experiment</h2>
-<p>Try these exercises:</p>
+<h2>Step 4: How to Read Ink Code</h2>
+<div class="explanation">
+<ul>
+  <li><strong>Top to bottom:</strong> Ink reads each line in order.</li>
+  <li><strong>Variables:</strong> Updated in memory whenever you use "~". The computer keeps track.</li>
+  <li><strong>Choices (+):</strong> Pause story, wait for player input, then jump via divert (->).</li>
+  <li><strong>Conditionals:</strong> The computer evaluates them immediately. Only the matching branch executes.</li>
+  <li><strong>Diverts:</strong> Jump instantly to another knot; the computer resumes reading there.</li>
+</ul>
+</div>
+
+<h2>Step 5: Experiment and Tweak Ideas</h2>
+<p>Try modifying the story to see how Ink works:</p>
 <ul>
   <li>Add a new knot with a hidden treasure.</li>
-  <li>Make the right path lose 2 lives instead of 1.</li>
-  <li>Add another item in the backpack and track it with a Boolean variable.</li>
-  <li>Experiment with conditionals: make some text or choices appear only if the player has a key.</li>
+  <li>Make the right path cost 2 lives instead of 1.</li>
+  <li>Add more items in the backpack and track them with Boolean variables.</li>
+  <li>Show different text or choices if the player has a key.</li>
+  <li>Make a secret path only visible if the player has found an item.</li>
+  <li>Add more complex conditionals: e.g., if lives &lt; 2 and has_key, trigger a special ending.</li>
 </ul>
 
-<h2>Step 5: Resources</h2>
+<h2>Step 6: Resources</h2>
 <p>Download the Ink files:</p>
 <ul>
   <li><a href="crossroads_basic.ink">Basic Story</a></li>
