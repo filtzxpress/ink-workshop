@@ -196,24 +196,40 @@ Think of knots like paragraphs, diverts like hyperlinks, and choices like button
 
 <h2>4. Example: A Simple Game with Lives</h2>
 
-<pre><code id="code2">VAR lives = 2
+<div class="code-block">
+  <button class="copy-button">Copy</button>
+  <pre><code>
+VAR has_key = false        <span class="hint">// Boolean: tracks if player has key</span>
+VAR lives = 3              <span class="hint">// Integer: tracks remaining lives</span>
+VAR previous_knot = "start" <span class="hint">// Track previous knot</span>
 
 === start ===
-You are at a crossroads. What do you do?
-
-+ [Go left] -> left_path
-+ [Go right] -> right_path
-+ [Check backpack] -> backpack
+{lives > 0:                <span class="hint">// Conditional: if lives > 0</span>
+    You are at a crossroads. What do you do?
+    + [Go left] -> left_path
+    + [Go right] -> right_path
+    + [Check your backpack] -> check_inventory
+- else:
+    You’re out of lives! Game over.
+    + [Try again?] -> restart_game
+}
 
 === left_path ===
-You find a river. You drink some water and feel better.
--> start
+~ previous_knot = "left_path"    <span class="hint">// Remember where player is</span>
+You find a shiny key!
+{has_key == false:
+    ~ has_key = true        <span class="hint">// Computer updates variable</span>
+    You put it in your backpack.
+- else:
+    You already have the key.
+}
++ [Go back] -> start
 
 === right_path ===
+~ previous_knot = "right_path"
 You walk down the right path and suddenly fall into a trap!
-
+~ lives = lives - 1          <span class="hint">// Subtract 1 from lives</span>
 {lives > 0:
-    ~ lives = lives - 1
     You lose a life. You have {lives} lives left.
     + [Climb out and go back to the crossroads] -> start
 - else:
@@ -221,22 +237,26 @@ You walk down the right path and suddenly fall into a trap!
     + [Try again?] -> restart_game
 }
 
-=== backpack ===
-You open your backpack and find a sandwich and a flashlight.
-+ [Eat the sandwich] -> eat
-+ [Go back] -> start
+=== check_inventory ===
+{has_key:
+    You have a key in your backpack.
+- else:
+    Your backpack is empty.
+}
++ [Return] -> return_from_inventory
 
-=== eat ===
-You eat the sandwich. Delicious.
--> start
+=== return_from_inventory ===
+-> {previous_knot}          <span class="hint">// Return to previous knot</span>
 
 === restart_game ===
-~ lives = 2
+~ lives = 3
+~ has_key = false
 You take a deep breath and start over.
 -> start
 
 -> END
-</code><button class="copy-btn" onclick="copyCode('code2')">Copy</button></pre>
+  </code></pre>
+</div>
 
 <div class="note">
 ✅ This example introduces:
