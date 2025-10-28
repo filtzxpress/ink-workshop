@@ -1,146 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Ink Workshop – Beginner Friendly</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      margin: 20px auto;
-      max-width: 900px;
-      padding: 20px;
-      background-color: #fefefe;
-      color: #333;
-    }
-    h1, h2 { color: #2c3e50; }
-    h1 { border-bottom: 2px solid #2c3e50; padding-bottom: 5px; }
-    pre {
-      background-color: #f4f4f4;
-      border-left: 4px solid #3498db;
-      padding: 10px;
-      border-radius: 4px;
-      overflow-x: auto;
-      margin-top: 0;
-      position: relative;
-    }
-    code { 
-      font-family: Consolas, monospace;
-      display: block;
-      white-space: pre;
-    }
-    a { color: #2980b9; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    ul { margin-left: 20px; }
-    .explanation { background: #ecf0f1; padding: 10px; border-left: 4px solid #e67e22; margin-bottom: 10px; }
-    .code-block { position: relative; margin-bottom: 20px; }
-    .copy-button {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      padding: 5px 10px;
-      font-size: 0.9em;
-      cursor: pointer;
-      background-color: #3498db;
-      color: white;
-      border: none;
-      border-radius: 3px;
-      z-index: 2;
-    }
-    .copy-button:hover { background-color: #2980b9; }
-    .hint { color: #e67e22; font-weight: bold; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Intro to Ink: Interactive Story Basics</title>
+
+<!-- Minimal, embedded styling -->
+<style>
+  :root {
+    --bg: #fafafa;
+    --text: #222;
+    --accent: #0056b3;
+    --code-bg: #1e1e1e;
+    --code-text: #f8f8f2;
+    --border-radius: 8px;
+  }
+
+  body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0 auto;
+    padding: 2em;
+    max-width: 850px;
+    line-height: 1.7;
+    color: var(--text);
+    background: var(--bg);
+  }
+
+  h1, h2, h3 {
+    color: var(--accent);
+  }
+
+  h1 {
+    font-size: 2em;
+    margin-bottom: 0.4em;
+  }
+
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 1.2em;
+    border-radius: var(--border-radius);
+    position: relative;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  code {
+    font-family: "Fira Code", monospace;
+  }
+
+  button.copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: background 0.2s;
+  }
+
+  button.copy-btn:hover {
+    background: #007fff;
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 2.5em 0;
+  }
+
+  li {
+    margin: 0.3em 0;
+  }
+
+  .note {
+    background: #e9f2ff;
+    border-left: 4px solid var(--accent);
+    padding: 0.7em 1em;
+    border-radius: var(--border-radius);
+    margin-bottom: 1.5em;
+  }
+</style>
 </head>
 <body>
 
-<h1>Interactive Fiction with Ink – Beginner Friendly</h1>
+<h1>🎮 Introduction to Ink</h1>
+<p><strong>Ink</strong> is a simple scripting language used to create interactive stories — like <em>Choose Your Own Adventure</em> games. It powers narrative games such as <em>80 Days</em> and <em>Heaven’s Vault</em>.</p>
 
-<p>Welcome! This page guides you through creating interactive stories using Ink. We’ll break down the code, explain variables, conditionals, knots, diverts, and how the computer reads and executes your story. Don’t worry if it seems confusing at first — step by step, it will make sense.</p>
+<p>Ink scripts are built from <strong>knots</strong> (story sections) connected by <strong>diverts</strong> (links). Players make choices that determine what happens next.</p>
 
-<h2>Step 1: Install Inky</h2>
-<p>Download <a href="https://www.inklestudios.com/inky/">Inky</a> and open it on your computer. You can copy code from this page, paste it into Inky, and run it immediately.</p>
+<hr>
 
-<h2>Step 2: Basic Story – Knots, Choices, Diverts</h2>
-<div class="explanation">
-<strong>Knots:</strong> Named sections of your story, like chapters. The computer jumps between knots using diverts.<br>
-<strong>Choices:</strong> Player decisions. "+" allows multiple selections; "*" is one-time only.<br>
-<strong>Diverts (->):</strong> Tells the computer where to go next. Without a divert, the story ends.<br>
-<strong>Computer perspective:</strong> The computer reads the story line by line. When it sees a choice, it waits for input. When a choice is selected, it jumps to the specified knot and continues.
+<h2>1. Your First Story</h2>
+<p>Here’s a simple Ink story. Choices use a <code>+</code> symbol, and diverts (<code>-></code>) move the reader to another part of the story.</p>
+
+<pre><code id="code1">=== start ===
+You are standing at a crossroads. Do you go left or right?
+
++ [Go left] -> left_path
++ [Go right] -> right_path
+
+=== left_path ===
+You find a friendly dog who follows you home. 🐶
+-> END
+
+=== right_path ===
+You fall into a trap! Oh no!
+-> END
+</code><button class="copy-btn" onclick="copyCode('code1')">Copy</button></pre>
+
+<div class="note">
+<strong>Try this:</strong> Add a third choice, change the descriptions, or add an emoji or sound effect. Then open the story in <a href="https://inky.tool" target="_blank">Inky</a> to see what happens.
 </div>
 
-<div class="code-block">
-  <pre>
-    <button class="copy-button">Copy</button>
-    <code>
-=== start ===   // Knot starts here
-You are at a crossroads.
+<hr>
 
-+ [Go left] -> left     // Choice → jump to 'left'
-+ [Go right] -> right   // Choice → jump to 'right'
+<h2>2. Understanding the Basics</h2>
+<ul>
+  <li><strong>Knots</strong>: Sections of the story, written as <code>=== name ===</code>.</li>
+  <li><strong>Diverts</strong>: Use <code>-> name</code> to jump to another knot.</li>
+  <li><strong>Choices</strong>: Use <code>+</code> to present an option to the player.</li>
+  <li><strong>END</strong>: Marks the end of a story path.</li>
+</ul>
 
-=== left ===
-You find a treasure chest!
-You win!
-+ [Play again] -> start  // Choice → restart story
-
-=== right ===
-You fall into a trap!
-Game over.
-+ [Try again] -> start    // Choice → restart story
-    </code>
-  </pre>
+<div class="note">
+Think of knots like paragraphs, diverts like hyperlinks, and choices like buttons the player can press.
 </div>
 
-<h2>Step 3: Variables, Conditionals, Inventory</h2>
-<div class="explanation">
-<strong>Variables:</strong> The computer uses them to "remember" state.  
-- <strong>Boolean:</strong> True/False (e.g., has_key = false).  
-- <strong>Integer:</strong> Whole numbers (e.g., lives = 3).  
-<strong>Conditionals:</strong> Only run code if a condition is true.  
-<strong>Diverts in conditionals:</strong> The computer jumps to different knots depending on variable values.  
-</div>
+<hr>
 
-<div class="code-block">
-  <pre>
-    <button class="copy-button">Copy</button>
-    <code>
-VAR has_key = false        // Boolean: tracks if player has key
-VAR lives = 3              // Integer: tracks remaining lives
-VAR previous_knot = "start" // Track previous knot
+<h2>3. Variables and Logic</h2>
+<p>Ink can remember things! You can store numbers and true/false values in <strong>variables</strong>.</p>
+
+<ul>
+  <li><strong>Integer variable</strong>: Stores a number, e.g. <code>VAR lives = 3</code></li>
+  <li><strong>Boolean variable</strong>: Stores <code>true</code> or <code>false</code>, e.g. <code>VAR has_key = false</code></li>
+</ul>
+
+<p>You can use conditional text blocks to make the story react dynamically:</p>
+
+<pre><code>{lives > 0:
+    You have {lives} lives left.
+- else:
+    You’re out of lives!
+}
+</code></pre>
+
+<p>The first part runs if the condition is <code>true</code>, otherwise Ink shows the <code>else</code> block.</p>
+
+<hr>
+
+<h2>4. Example: A Simple Game with Lives</h2>
+
+<pre><code id="code2">VAR lives = 2
 
 === start ===
-{lives > 0:                // Conditional: if lives > 0
-    What do you do at the crossroads?
-    + [Go left] -> left
-    + [Go right] -> right
-    + [Check your backpack] -> check_inventory
+You are at a crossroads. What do you do?
+
++ [Go left] -> left_path
++ [Go right] -> right_path
++ [Check backpack] -> backpack
+
+=== left_path ===
+You find a river. You drink some water and feel better.
+-> start
+
+=== right_path ===
+You walk down the right path and suddenly fall into a trap!
+
+{lives > 0:
+    ~ lives = lives - 1
+    You lose a life. You have {lives} lives left.
+    + [Climb out and go back to the crossroads] -> start
 - else:
     You’re out of lives! Game over.
     + [Try again?] -> restart_game
 }
 
-=== left ===
-~ previous_knot = "left"    // Remember where player is
-You find a shiny key!
-{has_key == false:
-    ~ has_key = true        // Computer updates variable
-    You put it in your backpack.
-- else:
-    You already have the key.
-}
+=== backpack ===
+You open your backpack and find a sandwich and a flashlight.
++ [Eat the sandwich] -> eat
 + [Go back] -> start
 
-=== right ===
-~ previous_knot = "right"
-You fall into a trap!
-~ lives = lives - 1          // Subtract 1 from lives
-{lives > 0:
-    You lose a life. You have {lives} lives left.
-    -> start                // Divert back to start
-- else:
-    You’re out of lives! Game over.
-    + [Try again?] -> restart_game
-}
+=== eat ===
+You eat the sandwich. Delicious.
+-> start
 
-=== check_inventory ===
-{has_k_
+=== restart_game ===
+~ lives = 2
+You take a deep breath and start over.
+-> start
+
+-> END
+</code><button class="copy-btn" onclick="copyCode('code2')">Copy</button></pre>
+
+<div class="note">
+✅ This example introduces:
+<ul>
+<li>Variables (<code>VAR</code>)</li>
+<li>Conditionals (<code>{lives > 0: ...}</code>)</li>
+<li>Updating variables (<code>~ lives = lives - 1</code>)</li>
+<li>Loops and restarts</li>
+</ul>
+</div>
+
+<hr>
+
+<h2>5. How Ink “Thinks”</h2>
+<ul>
+  <li>When Ink sees <code>{lives}</code>, it substitutes the current number.</li>
+  <li>When it reaches <code>~ lives = lives - 1</code>, it updates the stored value.</li>
+  <li>When it reads <code>{condition: ... - else: ...}</code>, it checks which part to display.</li>
+</ul>
+
+<p>Ink keeps variable values in memory for the rest of the story (unless you reset them).</p>
+
+<hr>
+
+<h2>6. Challenge Ideas</h2>
+<ul>
+  <li>Add a variable like <code>VAR has_sword = false</code> — and let the player find or use it later.</li>
+  <li>Make choices appear only when certain conditions are met (e.g. <code>{has_key: + [Open the door] -> next_room}</code>).</li>
+  <li>Add an inventory that tracks items the player collects.</li>
+  <li>Introduce “points” or “energy” and reward the player for good decisions.</li>
+  <li>Create a hidden “ending” that only appears when specific variables are true.</li>
+</ul>
+
+<p><strong>Tip:</strong> Each time you modify the code, test it in <a href="https://inky.tool" target="_blank">Inky</a> and see how your story changes!</p>
+
+<script>
+function copyCode(id) {
+  const codeBlock = document.getElementById(id);
+  navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+    const btn = document.querySelector(`button[onclick="copyCode('${id}')"]`);
+    btn.textContent = "Copied!";
+    setTimeout(() => (btn.textContent = "Copy"), 1500);
+  });
+}
+</script>
+
+</body>
+</html>
