@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Intro to Ink: Interactive Story Basics</title>
 
-<!-- Minimal, embedded styling -->
 <style>
   :root {
     --bg: #fafafa;
     --text: #222;
     --accent: #0056b3;
+    --accent-light: #007fff;
     --code-bg: #1e1e1e;
     --code-text: #f8f8f2;
     --border-radius: 8px;
@@ -65,7 +65,7 @@
   }
 
   button.copy-btn:hover {
-    background: #007fff;
+    background: var(--accent-light);
   }
 
   a {
@@ -93,6 +93,22 @@
     padding: 0.7em 1em;
     border-radius: var(--border-radius);
     margin-bottom: 1.5em;
+  }
+
+  .stop {
+    background: #fff3cd;
+    border-left: 4px solid #f0ad4e;
+    padding: 1em;
+    border-radius: var(--border-radius);
+    margin-top: 1.2em;
+  }
+
+  .error-box {
+    background: #fdecea;
+    border-left: 4px solid #e74c3c;
+    padding: 1em;
+    border-radius: var(--border-radius);
+    margin-top: 1.5em;
   }
 </style>
 </head>
@@ -125,6 +141,17 @@ You fall into a trap! Oh no!
 
 <div class="note">
 <strong>Try this:</strong> Add a third choice, change the descriptions, or add an emoji or sound effect. Then open the story in <a href="https://inky.tool" target="_blank">Inky</a> to see what happens.
+</div>
+
+<div class="stop">
+  <strong>🟡 STOP – Hold here for Michael</strong><br><br>
+  Before you move on, take a few minutes to <strong>expand your story text</strong>.  
+  <ul>
+    <li>Add more detail or emotion to each knot — what’s the tone or feeling?</li>
+    <li>Try to include some <em>subtext</em> — what’s happening beneath the surface?</li>
+    <li>How does the setting or word choice affect the mood or tension?</li>
+  </ul>
+  If you finish early, keep refining the writing. Don’t rush into the next section yet.
 </div>
 
 <hr>
@@ -240,7 +267,43 @@ You take a deep breath and start over.
   <li>Create a hidden “ending” that only appears when specific variables are true.</li>
 </ul>
 
-<p><strong>Tip:</strong> Each time you modify the code, test it in <a href="https://inky.tool" target="_blank">Inky</a> and see how your story changes!</p>
+<hr>
+
+<h2>7. Common Ink Errors & Fixes</h2>
+
+<div class="error-box">
+<strong>⚠️ Error: “Ran out of content. Do you need a -> END?”</strong><br>
+Ink reached the end of a knot without being told what to do next.<br>
+💡 Fix: Add <code>-> END</code> or a divert like <code>-> start</code>.
+</div>
+
+<div class="error-box">
+<strong>⚠️ Error: “The variable ‘x’ is not defined.”</strong><br>
+You tried to use a variable before declaring it.<br>
+💡 Fix: Add <code>VAR x = 0</code> at the top of your story.
+</div>
+
+<div class="error-box">
+<strong>⚠️ Problem: Choices don’t appear</strong><br>
+You may be missing a <code>+</code> at the start of a line.<br>
+💡 Fix: Make sure every player option starts with <code>+</code>.
+</div>
+
+<div class="error-box">
+<strong>⚠️ Issue: Story loops infinitely</strong><br>
+You might be diverting back to the same knot without a condition.<br>
+💡 Fix: Add an <code>if</code> or <code>{lives > 0}</code> block, or use <code>-> END</code> to break the loop.
+</div>
+
+<hr>
+
+<h2>8. Next Steps</h2>
+<p>When you’re ready, you can:</p>
+<ul>
+  <li>Experiment with <a href="https://www.inklestudios.com/ink/web-tutorial/" target="_blank">Ink’s official web tutorial</a>.</li>
+  <li>Look at examples of real games that use Ink, like <em>80 Days</em> or <em>Heaven’s Vault</em>.</li>
+  <li>Start planning your own branching story with emotional depth and multiple endings.</li>
+</ul>
 
 <script>
 function copyCode(id) {
