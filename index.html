@@ -36,8 +36,8 @@
     .code-block { position: relative; margin-bottom: 20px; }
     .copy-button {
       position: absolute;
-      top: 5px;
-      right: 5px;
+      top: 8px;
+      right: 8px;
       padding: 5px 10px;
       font-size: 0.9em;
       cursor: pointer;
@@ -45,6 +45,7 @@
       color: white;
       border: none;
       border-radius: 3px;
+      z-index: 2;
     }
     .copy-button:hover { background-color: #2980b9; }
     .hint { color: #e67e22; font-weight: bold; }
@@ -68,24 +69,26 @@
 </div>
 
 <div class="code-block">
-  <button class="copy-button">Copy</button>
-  <pre><code>
-=== start ===   <span class="hint">// Knot starts here</span>
+  <pre>
+    <button class="copy-button">Copy</button>
+    <code>
+=== start ===   // Knot starts here
 You are at a crossroads.
 
-+ [Go left] -> left     <span class="hint">// Choice → jump to 'left'</span>
-+ [Go right] -> right   <span class="hint">// Choice → jump to 'right'</span>
++ [Go left] -> left     // Choice → jump to 'left'
++ [Go right] -> right   // Choice → jump to 'right'
 
 === left ===
 You find a treasure chest!
 You win!
-+ [Play again] -> start  <span class="hint">// Choice → restart story</span>
++ [Play again] -> start  // Choice → restart story
 
 === right ===
 You fall into a trap!
 Game over.
-+ [Try again] -> start    <span class="hint">// Choice → restart story</span>
-  </code></pre>
++ [Try again] -> start    // Choice → restart story
+    </code>
+  </pre>
 </div>
 
 <h2>Step 3: Variables, Conditionals, Inventory</h2>
@@ -98,14 +101,15 @@ Game over.
 </div>
 
 <div class="code-block">
-  <button class="copy-button">Copy</button>
-  <pre><code>
-VAR has_key = false        <span class="hint">// Boolean: tracks if player has key</span>
-VAR lives = 3              <span class="hint">// Integer: tracks remaining lives</span>
-VAR previous_knot = "start" <span class="hint">// Track previous knot</span>
+  <pre>
+    <button class="copy-button">Copy</button>
+    <code>
+VAR has_key = false        // Boolean: tracks if player has key
+VAR lives = 3              // Integer: tracks remaining lives
+VAR previous_knot = "start" // Track previous knot
 
 === start ===
-{lives > 0:                <span class="hint">// Conditional: if lives > 0</span>
+{lives > 0:                // Conditional: if lives > 0
     What do you do at the crossroads?
     + [Go left] -> left
     + [Go right] -> right
@@ -116,10 +120,10 @@ VAR previous_knot = "start" <span class="hint">// Track previous knot</span>
 }
 
 === left ===
-~ previous_knot = "left"    <span class="hint">// Remember where player is</span>
+~ previous_knot = "left"    // Remember where player is
 You find a shiny key!
 {has_key == false:
-    ~ has_key = true        <span class="hint">// Computer updates variable</span>
+    ~ has_key = true        // Computer updates variable
     You put it in your backpack.
 - else:
     You already have the key.
@@ -129,73 +133,14 @@ You find a shiny key!
 === right ===
 ~ previous_knot = "right"
 You fall into a trap!
-~ lives = lives - 1          <span class="hint">// Subtract 1 from lives</span>
+~ lives = lives - 1          // Subtract 1 from lives
 {lives > 0:
     You lose a life. You have {lives} lives left.
-    -> start                <span class="hint">// Divert back to start</span>
+    -> start                // Divert back to start
 - else:
     You’re out of lives! Game over.
     + [Try again?] -> restart_game
 }
 
 === check_inventory ===
-{has_key:
-    You have a key in your backpack.
-- else:
-    Your backpack is empty.
-}
-+ [Return] -> return_from_inventory
-
-=== return_from_inventory ===
--> {previous_knot}          <span class="hint">// Return to previous knot</span>
-
-=== restart_game ===
-~ lives = 3
-~ has_key = false
--> start
-  </code></pre>
-</div>
-
-<h2>Step 4: How to Read Ink Code</h2>
-<div class="explanation">
-<ul>
-  <li><strong>Top to bottom:</strong> Ink reads each line in order.</li>
-  <li><strong>Variables:</strong> Updated in memory whenever you use "~". The computer keeps track.</li>
-  <li><strong>Choices (+):</strong> Pause story, wait for player input, then jump via divert (->).</li>
-  <li><strong>Conditionals:</strong> The computer evaluates them immediately. Only the matching branch executes.</li>
-  <li><strong>Diverts:</strong> Jump instantly to another knot; the computer resumes reading there.</li>
-</ul>
-</div>
-
-<h2>Step 5: Experiment and Tweak Ideas</h2>
-<p>Try modifying the story to see how Ink works:</p>
-<ul>
-  <li>Add a new knot with a hidden treasure.</li>
-  <li>Make the right path cost 2 lives instead of 1.</li>
-  <li>Add more items in the backpack and track them with Boolean variables.</li>
-  <li>Show different text or choices if the player has a key.</li>
-  <li>Make a secret path only visible if the player has found an item.</li>
-  <li>Add more complex conditionals: e.g., if lives &lt; 2 and has_key, trigger a special ending.</li>
-</ul>
-
-<h2>Step 6: Resources</h2>
-<p>Download the Ink files:</p>
-<ul>
-  <li><a href="crossroads_basic.ink">Basic Story</a></li>
-  <li><a href="crossroads_variables.ink">Variables & Inventory Story</a></li>
-</ul>
-
-<script>
-document.querySelectorAll('.copy-button').forEach(button => {
-  button.addEventListener('click', () => {
-    const code = button.nextElementSibling.innerText;
-    navigator.clipboard.writeText(code).then(() => {
-      button.innerText = 'Copied!';
-      setTimeout(() => button.innerText = 'Copy', 1500);
-    });
-  });
-});
-</script>
-
-</body>
-</html>
+{has_k_
