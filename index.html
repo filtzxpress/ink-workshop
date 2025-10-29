@@ -124,19 +124,32 @@
 <h2>1. Your First Story</h2>
 <p>Here’s a simple Ink story. Choices use a <code>+</code> symbol, and diverts (<code>-></code>) move the reader to another part of the story.</p>
 
-<pre><code id="code1">=== start ===
-You are standing at a crossroads. Do you go left or right?
+<pre><code id="code1">You're standing at a crossroads.
 
-+ [Go left] -> left_path
-+ [Go right] -> right_path
+*[click to start]->start
 
-=== left_path ===
-You find a friendly dog who follows you home. 🐶
--> END
+===start===
 
-=== right_path ===
-You fall into a trap! Oh no!
--> END
+What do you do at the crossroads?
+
+* [Go left] -> left
+* [Go right] -> right
+
+=== left ===
+You find a treasure chest!
+You win!
+
+* [Play again]
+   ->start
+    -> END
+
+=== right ===
+You fall into a trap!
+Game over.
+
+* [Try again]
+    ->start
+    -> END
 </code><button class="copy-btn" onclick="copyCode('code1')">Copy</button></pre>
 
 <div class="note">
