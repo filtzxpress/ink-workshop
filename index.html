@@ -153,11 +153,13 @@ Game over.
 <h2>2. Example: A Simple Game with Lives and Items</h2>
 
 <pre><code id="code2">VAR has_key = false
+
+VAR has_key = false
 VAR lives = 3
 VAR previous_knot = "start"
 
 You are at a crossroads. 
-+ [Start the game] -> start
++ [Start the game] -->start
 
 === start ===
 {lives > 0:
@@ -205,12 +207,16 @@ You walk down the right path and suddenly fall into a trap!
 }
 
 + [Return]
-{ 
-    - when (previous_knot == "left_path"): -> left_path
-    - when (previous_knot == "right_path"): -> right_path
-    - else: -> start
-}
-
+    {previous_knot == "left_path":
+        -> left_path
+    - else:
+        {previous_knot == "right_path":
+            -> right_path
+        - else:
+            -> start
+        }
+    }
+    
 === restart_game ===
 ~ lives = 3
 ~ has_key = false
