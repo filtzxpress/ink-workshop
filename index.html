@@ -30,11 +30,6 @@
     color: var(--accent);
   }
 
-  h1 {
-    font-size: 2em;
-    margin-bottom: 0.4em;
-  }
-
   pre {
     background: var(--code-bg);
     color: var(--code-text);
@@ -117,18 +112,15 @@
 <h1>🎮 Introduction to Ink</h1>
 <p><strong>Ink</strong> is a simple scripting language used to create interactive stories — like <em>Choose Your Own Adventure</em> games. It powers narrative games such as <em>80 Days</em> and <em>Heaven’s Vault</em>.</p>
 
-<p>Ink scripts are built from <strong>knots</strong> (story sections) connected by <strong>diverts</strong> (links). Players make choices that determine what happens next.</p>
-
 <hr>
 
 <h2>1. Your First Story</h2>
-<p>Here’s a simple Ink story. Choices use a <code>+</code> symbol, and diverts (<code>-></code>) move the reader to another part of the story.</p>
 
 <pre><code id="code1">You're standing at a crossroads.
 
-*[click to start]->start
+*[click to start] -> start
 
-===start===
+=== start ===
 
 What do you do at the crossroads?
 
@@ -140,7 +132,7 @@ You find a treasure chest!
 You win!
 
 + [Play again]
-   ->start
+    -> start
     -> END
 
 === right ===
@@ -148,7 +140,7 @@ You fall into a trap!
 Game over.
 
 + [Try again]
-    ->start
+    -> start
     -> END
 </code><button class="copy-btn" onclick="copyCode('code1')">Copy</button></pre>
 
@@ -158,69 +150,14 @@ Game over.
 
 <hr>
 
-<h2>2. Understanding the Basics</h2>
-<ul>
-  <li><strong>Knots</strong>: Sections of the story, written as <code>=== name ===</code>.</li>
-  <li><strong>Diverts</strong>: Use <code>-> name</code> to jump to another knot.</li>
-  <li><strong>Choices</strong>: Use <code>+</code> to present an option to the player.</li>
-  <li><strong>END</strong>: Marks the end of a story path.</li>
-</ul>
+<h2>2. Example: A Simple Game with Lives and Items</h2>
 
-  <div class="note">
-Think of knots like paragraphs, diverts like hyperlinks, and choices like buttons the player can press.
-</div>
-
-  <div class="stop">
-  <strong>🟡 STOP – Hold here for Michael</strong><br><br>
-  Before you move on, take a few minutes to <strong>expand your story text</strong>.  
-  <ul>
-    <li>Add more detail or emotion to each knot — what’s the tone or feeling?</li>
-    <li>Try to include some <em>subtext</em> — what’s happening beneath the surface?</li>
-    <li>How does the setting or word choice affect the mood or tension?</li>
-  </ul>
-  If you finish early, keep refining the writing. Don’t rush into the next section yet.
-</div>
-<hr>
-  
-
-
-<hr>
-
-<h2>3. Variables and Logic</h2>
-<p>Ink can remember things! You can store numbers and true/false values in <strong>variables</strong>.</p>
-
-<ul>
-  <li><strong>Integer variable</strong>: Stores a number, e.g. <code>VAR lives = 3</code></li>
-  <li><strong>Boolean variable</strong>: Stores <code>true</code> or <code>false</code>, e.g. <code>VAR has_key = false</code></li>
-</ul>
-
-<p>You can use conditional text blocks to make the story react dynamically:</p>
-
-<pre><code>{lives > 0:
-    You have {lives} lives left.
-- else:
-    You’re out of lives!
-}
-</code></pre>
-
-<p>The first part runs if the condition is <code>true</code>, otherwise Ink shows the <code>else</code> block.</p>
-
-<hr>
-
-<h2>4. Example: A Simple Game with Lives</h2>
-
-<pre><code id="code1">
-  
-VAR has_key = false
-VAR lives = 3
-VAR previous_knot = "start"
-
-VAR has_key = false
+<pre><code id="code2">VAR has_key = false
 VAR lives = 3
 VAR previous_knot = "start"
 
 You are at a crossroads. 
-+ [Start the game] -->start
++ [Start the game] -> start
 
 === start ===
 {lives > 0:
@@ -268,22 +205,18 @@ You walk down the right path and suddenly fall into a trap!
 }
 
 + [Return]
-    {previous_knot == "left_path":
-        -> left_path
-    - else:
-        {previous_knot == "right_path":
-            -> right_path
-        - else:
-            -> start
-        }
-    }
-    
+{ 
+    - when (previous_knot == "left_path"): -> left_path
+    - when (previous_knot == "right_path"): -> right_path
+    - else: -> start
+}
+
 === restart_game ===
 ~ lives = 3
 ~ has_key = false
 You take a deep breath and start over.
 -> start
-</code><button class="copy-btn" onclick="copyCode('code1')">Copy</button></pre>
+</code><button class="copy-btn" onclick="copyCode('code2')">Copy</button></pre>
 
 <div class="note">
 ✅ This example introduces:
@@ -297,72 +230,26 @@ You take a deep breath and start over.
 
 <hr>
 
-<h2>5. How Ink “Thinks”</h2>
+<h2>Next Steps</h2>
+<p>After finishing both stories above, you can:</p>
 <ul>
-  <li>When Ink sees <code>{lives}</code>, it substitutes the current number.</li>
-  <li>When it reaches <code>~ lives = lives - 1</code>, it updates the stored value.</li>
-  <li>When it reads <code>{condition: ... - else: ...}</code>, it checks which part to display.</li>
-</ul>
-
-<p>Ink keeps variable values in memory for the rest of the story (unless you reset them).</p>
-
-<hr>
-
-<h2>6. Challenge Ideas</h2>
-<ul>
-  <li>Add a variable like <code>VAR has_sword = false</code> — and let the player find or use it later.</li>
-  <li>Make choices appear only when certain conditions are met (e.g. <code>{has_key: + [Open the door] -> next_room}</code>).</li>
-  <li>Add an inventory that tracks items the player collects.</li>
-  <li>Introduce “points” or “energy” and reward the player for good decisions.</li>
-  <li>Create a hidden “ending” that only appears when specific variables are true.</li>
+  <li>Modify the second game with your own theme, setting, or goal.</li>
+  <li>Add new variables, objects, or consequences to make the world feel more alive.</li>
+  <li><strong>💡 Then:</strong> Start coding the story you developed last week on index cards — bring it to life using Ink!</li>
 </ul>
 
 <hr>
-
-<h2>7. Common Ink Errors & Fixes</h2>
-
-<div class="error-box">
-<strong>⚠️ Error: “Ran out of content. Do you need a -> END?”</strong><br>
-Ink reached the end of a knot without being told what to do next.<br>
-💡 Fix: Add <code>-> END</code> or a divert like <code>-> start</code>.
-</div>
-
-<div class="error-box">
-<strong>⚠️ Error: “The variable ‘x’ is not defined.”</strong><br>
-You tried to use a variable before declaring it.<br>
-💡 Fix: Add <code>VAR x = 0</code> at the top of your story.
-</div>
-
-<div class="error-box">
-<strong>⚠️ Problem: Choices don’t appear</strong><br>
-You may be missing a <code>+</code> at the start of a line.<br>
-💡 Fix: Make sure every player option starts with <code>+</code>.
-</div>
-
-<div class="error-box">
-<strong>⚠️ Issue: Story loops infinitely</strong><br>
-You might be diverting back to the same knot without a condition.<br>
-💡 Fix: Add an <code>if</code> or <code>{lives > 0}</code> block, or use <code>-> END</code> to break the loop.
-</div>
-
-<hr>
-
-<h2>8. Next Steps</h2>
-<p>When you’re ready, you can:</p>
-<ul>
-  <li>Experiment with <a href="https://www.inklestudios.com/ink/web-tutorial/" target="_blank">Ink’s official web tutorial</a>.</li>
-  <li>Look at examples of real games that use Ink, like <em>80 Days</em> or <em>Heaven’s Vault</em>.</li>
-  <li>Start planning your own branching story with emotional depth and multiple endings.</li>
-</ul>
 
 <script>
 function copyCode(id) {
   const codeBlock = document.getElementById(id);
-  navigator.clipboard.writeText(codeBlock.textContent).then(() => {
-    const btn = document.querySelector(`button[onclick="copyCode('${id}')"]`);
-    btn.textContent = "Copied!";
-    setTimeout(() => (btn.textContent = "Copy"), 1500);
-  });
+  navigator.clipboard.writeText(codeBlock.textContent.trim())
+    .then(() => {
+      const btn = document.querySelector(`button[onclick="copyCode('${id}')"]`);
+      btn.textContent = "Copied!";
+      setTimeout(() => (btn.textContent = "Copy"), 1500);
+    })
+    .catch(() => alert("Copy failed — please try manually."));
 }
 </script>
 
