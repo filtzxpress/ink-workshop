@@ -212,16 +212,16 @@ You are at a crossroads.
 
 === left_path ===
 ~ previous_knot = "left_path"
-You find a shiny key!
 
 {has_key == false:
     ~ has_key = true
-    You put it in your backpack.
+    You find a key. You put it in your backpack.
 - else:
-    You already have the key.
+    You notice a trap door. 
 }
 
 + [Go back] -> start
++ [Use the key to open the trap door] -> trap_door
 
 === right_path ===
 ~ previous_knot = "right_path"
@@ -235,6 +235,10 @@ You walk down the right path and suddenly fall into a trap!
     You’re out of lives! Game over.
     + [Try again?] -> restart_game
 }
+
+=== trap_door ===
+You find the treasure!
++ [Play again?] -> restart_game
 
 === check_inventory ===
 {has_key:
