@@ -209,9 +209,8 @@ Think of knots like paragraphs, diverts like hyperlinks, and choices like button
 
 <h2>4. Example: A Simple Game with Lives</h2>
 
-<div class="code-block">
-  <button class="copy-button">Copy</button>
-  <pre><code>
+<pre><code id="code1">
+  
 VAR has_key = false
 VAR lives = 3
 VAR previous_knot = "start"
@@ -284,8 +283,7 @@ You walk down the right path and suddenly fall into a trap!
 ~ has_key = false
 You take a deep breath and start over.
 -> start
-  </code></pre>
-</div>
+</code><button class="copy-btn" onclick="copyCode('code1')">Copy</button></pre>
 
 <div class="note">
 ✅ This example introduces:
