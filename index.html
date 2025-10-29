@@ -212,13 +212,21 @@ Think of knots like paragraphs, diverts like hyperlinks, and choices like button
 <div class="code-block">
   <button class="copy-button">Copy</button>
   <pre><code>
-VAR has_key = false        <span class="hint">// Boolean: tracks if player has key</span>
-VAR lives = 3              <span class="hint">// Integer: tracks remaining lives</span>
-VAR previous_knot = "start" <span class="hint">// Track previous knot</span>
+VAR has_key = false
+VAR lives = 3
+VAR previous_knot = "start"
+
+VAR has_key = false
+VAR lives = 3
+VAR previous_knot = "start"
+
+You are at a crossroads. 
++ [Start the game] -->start
 
 === start ===
-{lives > 0:                <span class="hint">// Conditional: if lives > 0</span>
+{lives > 0:
     You are at a crossroads. What do you do?
+
     + [Go left] -> left_path
     + [Go right] -> right_path
     + [Check your backpack] -> check_inventory
@@ -228,20 +236,23 @@ VAR previous_knot = "start" <span class="hint">// Track previous knot</span>
 }
 
 === left_path ===
-~ previous_knot = "left_path"    <span class="hint">// Remember where player is</span>
+~ previous_knot = "left_path"
 You find a shiny key!
+
 {has_key == false:
-    ~ has_key = true        <span class="hint">// Computer updates variable</span>
+    ~ has_key = true
     You put it in your backpack.
 - else:
     You already have the key.
 }
+
 + [Go back] -> start
 
 === right_path ===
 ~ previous_knot = "right_path"
 You walk down the right path and suddenly fall into a trap!
-~ lives = lives - 1          <span class="hint">// Subtract 1 from lives</span>
+~ lives = lives - 1
+
 {lives > 0:
     You lose a life. You have {lives} lives left.
     + [Climb out and go back to the crossroads] -> start
@@ -256,18 +267,23 @@ You walk down the right path and suddenly fall into a trap!
 - else:
     Your backpack is empty.
 }
-+ [Return] -> return_from_inventory
 
-=== return_from_inventory ===
--> {previous_knot}          <span class="hint">// Return to previous knot</span>
-
++ [Return]
+    {previous_knot == "left_path":
+        -> left_path
+    - else:
+        {previous_knot == "right_path":
+            -> right_path
+        - else:
+            -> start
+        }
+    }
+    
 === restart_game ===
 ~ lives = 3
 ~ has_key = false
 You take a deep breath and start over.
 -> start
-
--> END
   </code></pre>
 </div>
 
